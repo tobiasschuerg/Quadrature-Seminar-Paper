@@ -1,0 +1,43 @@
+
+\section{Introduction}
+
+Quadrature itself is a historical term and originally meant 
+determining the area of a plane figure by constructing a square that 
+has the same area as the given figure. \emph{Squaring the circle}, also known as quadrature of the circle, is beside \emph{doubling the cube} and \emph{trisecting the angle} the most famous of the three classical problems in Greek mathematics which was extremely influential in the development of geometry and calculus.
+
+Quadrature is now more or less a synonym for integration, especially as applied to one-dimensional integrals and is generally used to mean numerical integration \cite{Wiki_Integration}.
+
+If $f(x)$ is a continuous real-valued function defined on a closed interval $[a, b]$, the area below the graph can be exactly computed with the antiderivative $F(x)$ of $f(x)$, for which $f = F'$ applies. The value of the integral on the closed interval is then determined by formula (\ref{integral}). \cite{HeuserAnalysis} 
+
+\begin{equation} \label{integral} 	
+\int_a^b\! f(x)\, dx = F(b) - F(a) 
+\end{equation}
+
+
+
+\subsection{Problem Description}
+There are cases when an exact mathematical integration is not available (or needed) and a numerical approach becomes useful. Then, approximating a definite integral from few values of the integrand is of central interest. There are several cases when this problem occurs, the most important are described next.
+
+\subsubsection{The integrand is partially unknown}
+In many situations, such when points are obtained by sampling, the integrand $f(x)$ may be known only at a finite set of points. Of course, the data points can be interpolated by a polynomial of which an antiderivative is known and is thereby integratable but without background knowledge about the origin, this interpolated polynomial might increase the error. 
+
+\subsubsection{The antiderivative is unknown}
+There are cases when the antiderivative is unknown or can only be estimated symbolically but with much more effort. An example of a function which can not be calculated easily because $f(x)$ has no elementary antiderivative is the Gaussian function does:
+
+\begin{equation} 	 	
+f(x) = exp(-x^2) 
+\end{equation}
+
+
+
+\subsection{Solution}
+The basic idea to determine the value of an integral is to evaluate it at a finite set of points, called integration points. Thereby the number of integration points depends on the degree of the function. If a function has singularities or oscillates, its integration points need to be chosen more carefully.
+
+Section \ref{background} explains the mathematical background and basic techniques for numerical integration. Specialized routines from numerical libraries for one- and multi-dimensional integrals are then presented in section \ref{routines}.
+
+
+
+\nocite{Coleman1977}
+\nocite{Gautschi1995}
+\nocite{GermundDahlquist2009}
+

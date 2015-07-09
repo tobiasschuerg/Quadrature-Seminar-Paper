@@ -1,0 +1,169 @@
+\section{Quadrature Methods} \label{routines}
+This section will give an overview of routines available in numerical libraries to perform quadrature.  For reasons of simplicity only the GNU Scientific Library (GSL)\cite{GSL_Reference} and the NAG Numerical Library (NAGLib)\cite{NAGlib} are considered.
+These routines are classified into three categories: one-dimensional, two-dimensional and multidimensional quadrature. Furthermore, another distinction between adaptive and non-adaptive routines can be made.
+
+There exist general purpose routines for people who do not care about computation time or are not willing to do any analysis of the integral. However, if efficiency is needed, there exist a lot of methods which accept additional parameters for specifying peaks, singularities or other problematic points. Also desired relative and absolute error bounds for the approximation can be specified.
+
+The final choice of a routine should be based amongst others on the type of interval, number of integrals, accepted error and available computation time.
+
+
+
+\subsection{One-Dimensional Quadrature}
+This section covers routines for numerical integration in one dimension. Both considered libraries are largely based on \emph{QUADPACK}, a Fortran library for numerical integration of one-dimensional functions by Piessens et al.\cite{quadpack}. There are nine routines for automatic quadrature included in QUADPACK which are described in the scope of this section.
+
+The naming conventions for the algorithms in QUADPACK use the following naming scheme:
+\begin{itemize}[noitemsep]
+\item[Q] - Quadrature routine
+\newline
+\item[N] - Non-adaptive integrator
+\item[A] - Adaptive integrator
+\newline
+\item[G] - General integrand (user-defined)
+\item[W] - Weight function with integrand
+\newline
+\item[S] - Singularities can be more readily integrated
+\item[P] - Points of special difficulty can be supplied
+\item[I] - Infinite range of integration
+\item[O] - Oscillatory weight function, cos or sin
+\item[F] - Fourier integral
+\item[C] - Cauchy principal value
+\end{itemize}
+
+Since the GSL uses a similar naming scheme (\emph{gsl\_integration\_} + *quadpack\_algorithm\_name*) the function names will not be stated separately for the GSL. 
+
+\subsubsection{QNG}
+QNG calculates an approximation to the integral of a function over a finite interval. It is a simple and non-adaptive routine and thus only recommended for smooth functions which neither have singularities, nor height peaks nor oscillate strongly. Depending on the desired accuracy the routine uses a 10-point, 21-point, 43-point or 87-point Gaussian rule. This is the only non-adaptive automatic integrator of QUADPACK. \cite{quadpack, GSL_Reference}
+
+NAGLib name: nag\_quad\_1d\_fin\_smooth (d01bdc) \cite{nag_d01bdc}
+
+
+
+\subsubsection{QAG}
+QAG is a simple globally adaptive integrator which uses 30-point and 61-point Gauss-Kronrod rules. The integration region is divided into subintervals, and on each iteration the subinterval with the largest estimated error is bisected. As this function is based on integration rules of high order, it is especially suitable for non-singular oscillating integrands. \cite{nag_d01skc, quadpack, GSL_Reference}
+
+NAGlib name: nag\_1d\_quad\_osc\_1 (d01skc) \cite{nag_d01skc}
+
+
+
+\subsubsection{QAGS}
+The QAGS routine is one of two general purpose routines, which are suitable for use without further analysis of the integrand. While this one is for integration over a finite interval, QAGI is the corresponding one for integration over an infinite interval. QAGS is a globally adaptive routine based on 21-point Gauss-Kronrod quadrature in connection with extrapolation. This routine is suitable as a general purpose integrator, and can be used when the integrand has singularities, especially when these are of algebraic or logarithmic type. \cite{quadpack, GSL_Reference, nag_d01sjc}
+
+NAGlib name: nag\_1d\_quad\_gen\_1 (d01sjc) \cite{nag_d01sjc}
+
+Another general purpose implementation, which is included in the NAGlib (nag\_quad\_1d\_fin\_gonnet\_vec (d01rgc)) and is similar but differs in how the evaluation error is estimated and in how singularities are treated. \cite{nag_d01rgc}
+
+
+
+\subsubsection{QAGP}
+QAGP is a modified version of the QAGS routine which allows the user to supply additional \emph{breakpoints}, points at which the function is difficult, such as internal singularities, discontinuities and other difficulties of the integrand function. By providing these breakpoints, the routine is less computational expensive than the original QAGS routine. \cite{quadpack, GSL_Reference, nag_d01slc}
+
+NAGlib name: nag\_1d\_quad\_brkpts\_1 (d01slc) \cite{nag_d01slc}
+
+
+
+\subsubsection{QAGI}
+QAGI is the second general purpose routine which is the only routine for infinite intervals. Internally the infinite interval is mapped onto the semi-open interval $(0,1]$ using a transformation similar to equation \ref{eq:interval}. After that a similar approach as in QAGS is used, except with 15-point rather than 21-point Gauss-Kronrod quadrature. \cite{quadpack, GSL_Reference, nag_d01smc}
+
+NAGlib name: nag\_1d\_quad\_inf\_1 (d01smc) \cite{nag_d01smc}
+
+
+\subsubsection{QAWO} QAWO is designed for integrands with an oscillatory 
+factor, $\sin(\omega x)$ or $\cos(\omega x)$. Internally an adaptive 
+subdivision scheme is used, which is a modification of the one in QAGS. Thus 
+this routine can also deal with singularities. \cite{GSL_Reference, quadpack, 
+nag_d01snc}
+
+NAGlib name: nag\_1d\_quad\_wt\_trig\_1 (d01snc) \cite{nag_d01snc}
+
+
+
+\subsubsection{QAWF}
+QAWF calculates an approximation to the sine or the cosine transform of a function over a semi-infinite interval using a Fourier transform. The integral is computed using the QAWO algorithm over each of the subintervals.\cite{GSL_Reference, quadpack, nag_d01ssc}
+
+NAGlib name: nag\_1d\_quad\_inf\_wt\_trig\_1 (d01ssc) \cite{nag_d01ssc}
+
+
+
+\subsubsection{QAWS}
+QAWS is an adaptive integrator which integrates a function of the form $\int_a^b g(x) w(x) \mathrm{d}x$, where the weight function $w$ may have algebraic-logarithmic singularities at the end-points $a$ and/or $b$\cite{quadpack}. In order to work efficiently the algorithm requires a precomputed table of Chebyshev moments which are used on all sub-intervals which have a or b as one of their end-points. On the other sub-intervals Gauss–Kronrod (7–15 point) integration is carried out.\cite{GSL_Reference, nag_d01spc}.
+
+NAGlib name: nag\_1d\_quad\_wt\_alglog\_1 (d01spc) \cite{nag_d01spc}
+
+
+\subsubsection{QAWC}
+QAWC computes the Cauchy principal value of the integral of $f(x)$ over $(a,b)$, with a singularity at c. \cite{quadpack}
+\begin{equation}
+I = \int_a^b dx f(x) / (x - c) \mathrm{d}x
+\label{eq:qawc}
+\end{equation}
+A globally adaptive bisection algorithm ensures that subdivisions do not occur at the singular point x = c. If  a sub-interval contains the point x = c or is close to it then a special 25-point modified Clenshaw-Curtis rule is used to control the singularity. Further away from the singularity the algorithm uses an ordinary 15-point Gauss-Kronrod integration rule. \cite{GSL_Reference}
+
+NAGlib name: nag\_1d\_quad\_wt\_cauchy\_1 (d01sqc) \cite{nag_d01sqc}
+
+
+
+\subsubsection{Gauss-Quadrature}
+The fixed-order Gauss-Legendre integration routines, whose rules are presented in more detail in section \ref{sec:gauss_quad}, provide fast integration of smooth functions with known polynomial order over a finite interval. Both libraries provide a method for approximating an integral by a n-point Gauss-Legendre rule which is exact for polynomials up to an order of $2*n-1$. Unlike the other numerical integration routines which are presented before, these routines do not accept absolute or relative error bounds. \cite{nag_d01tac, GSL_Reference} \newline
+The NAGlib also provides formulae for semi-infinite intervals (Gauss–Laguerre, rational Gauss) and infinite interval (Gauss–Hermite). \cite{nag_d01tac}
+
+
+
+\subsubsection{Data Values}
+The function nag\_1d\_quad\_vals (d01gac)\cite{nag_d01gac} is part of the NAGlib and integrates functions which are defined by data values only. The function to integrate needs to be specified at four or more points over the whole range. The points can be unequally spaced but should be in either ascending or descending order. 
+
+
+
+
+\subsection{Two-Dimensional Quadrature}
+The value of a two-dimensional integral can be determined by first integrating along one axis and then a along another. Additionally, NAGlib provides one specialized function, nag\_quad\_2d\_fin (d01dac) \cite{nag_d01ac}, to evaluate a definite double integral, such as the one in equation \ref{eq:double} where a and b are constants and $\phi_1{y}$ and $\phi_2{y}$ are functions of the variable y. Both integrals, the inner and the outer one, are then evaluated with the method described by Patterson \cite{Patterson1967} of 'the optimum additions of points to quadrature formulae'.
+
+\begin{equation}
+	\int_a^b \int_{\phi_1{y}}^{\phi_2(y)} f(x,y)  \, \mathrm{d}xy = \int_a^b F(y) \, \mathrm{d}y \, \quad
+	\text{where} \quad F(y) = \int_{\phi_1{y}}^{\phi_2(y)} f(x,y)\, \mathrm{d}x
+\label{eq:double}
+\end{equation}
+
+
+
+\subsection{Multidimensional Quadrature}
+This sections gives a short overview of the routines for multidimensional quadrature which are provided in the two considered numerical libraries. The routines and their general idea will only be mentioned briefly since the interested reader needs to become familiar with more specific or complex concepts such as number theoretic transformations, hypercubes, sparse grids, simplexes, etc. which are beyond the scope of this work.
+
+
+\subsubsection{Multidimensional Quadrature in GSL}
+There are no native routines for multidimensional quadrature included in the GSL. However, there exists a third-party package by Steven G. Johnson which provides adaptive multidimensional integration as extension. Two algorithms are provided.
+
+The first recursively partitions the integration domain into smaller subdomains and applies the same integration rule to each, until convergence is achieved. 'This algorithm is best suited for a moderate number of dimensions (say, $< 7$), and is superseded for high-dimensional integrals by other methods (e.g. Monte Carlo variants or sparse grids).'
+
+The second routine repeatedly doubles the degree of the quadrature rules until convergence is achieved. 'This algorithm is often superior to h-adaptive integration for smooth integrands in a few ($<=3$) dimensions, but is a poor choice in higher dimensions or for non-smooth integrands.' \cite{Johnson}
+
+\subsubsection{Multidimensional Quadrature in NAGlib}
+The NAGlib provides seven methods for determining the value of a multidimensional integral which are outlined below:
+
+\begin{itemize}
+\item nag\_quad\_md\_sgq\_multi\_vec (d01esc) \cite{nag_d01esc} \newline
+Uses sparse grids to estimate a vector $F$ of integrals over the unit hypercupe, given the vector of $f(x)$. This routine is feasible  for estimating integrals of high dimensions $d\sim O(100)$
+
+\item nag\_quad\_md\_gauss (d01fbc) \cite{nag_d01fbc} \newline
+This function uses Gaussian weights and abscissas to compute the value of a multidimensional integral over a hyper-rectangle. The number of dimensions may be anything between 1 and 20.
+
+\item nag\_quad\_md\_sphere (d01fdc) \cite{nag_d01fdc} \newline
+An approximation to a definite integral in up to 30 dimensions is computed by using the method of Sag and Szekers. The integration region is an n-sphere which can also be transformed to an n-cube.
+
+\item nag\_quad\_md\_numth\_vec (d01gdc) \cite{nag_d01gdc} \newline
+Uses a number theoretic approach to approximate an multidimensional definite integral in up to 20 dimensions. The result depends on the sequence of random numbers which is generated.
+
+\item nag\_quad\_md\_simplex (d01pac) \cite{nag_d01pac} \newline
+This function integrates a multidimensional integral by computing a sequence of approximations over a n-dimensional simplex.
+
+\item nag\_multid\_quad\_adapt\_1 (d01wcc) \cite{nag_d01wcc} \newline
+Estimates the integral over a hyper-rectangle with constant limits. It repeatedly subdivides each hyper-rectangle into smaller ones and applies a seventh-degree rule to it.
+
+\item nag\_multid\_quad\_monte\_carlo\_1 (d01xbc) \cite{nag_d01xbc} \newline
+Uses a Monte-Carlo method to approximate the integral of a function over a hyper rectangle. In the beginning the function subdivides the integration region into smaller sub-regions and estimates the integral and variance of each sub-region. The routine stops when desired accuracy has been reached or too many integral evaluations are required in the next cycle. Since this function relies on random numbers, each run may return different results.
+		
+\end{itemize}
+
+
+
+
+

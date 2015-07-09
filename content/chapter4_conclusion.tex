@@ -1,0 +1,41 @@
+\section{Summary}
+
+This work shows several ways how to estimate an integral numerically. This is 
+desired if either the integrand is partially unknown, there is no 
+antiderivative or its computation is too expensive. At this point numerical 
+algorithms provide an easier and approximated solution of the integral.
+
+In the first part, the most important concepts are presented. The basic idea 
+of these approaches is to evaluate the integrand at a finite set of points 
+and then to sum these values with addition of a weighting function. If the 
+function to be integrated is of a low polynomial degree, an exact solution 
+can be obtained by the Gaussian quadrature which only requires n points to 
+approximate a polynomial of degree $2n-1$. However, if the function has a 
+high degree, oscillates or contains singularities, other concepts are needed. 
+This often results in more function evaluations and can become expensive 
+again. 
+
+A variant to approximating the integral of a function in one step is to subdivide the interval into smaller intervals and determine the integral as a sum of all sub intervals. Especially on periodic functions, the composite midpoint rule becomes extremely accurate. The values of multidimensional intervals can also be determined by using a one-dimensional method in each dimension. This approach is only suitable for low dimensions since the number of evaluations rises exponentially with increasing degree. A technique which evaluates an integral at a random number of points are Monte-Carlo methods.
+
+The second part gives an overview of the routines implemented in numerical 
+libraries. As example libraries the Gnu Scientific Library and the library of 
+the Numerical Algorithms Group are considered. In the one-dimensional case 
+they both mostly rely on QUADPACK, a Fortran library for numerical 
+integration of one-dimensional integrals. QAGS and QAGI are two general 
+purpose routine which can be used without further analysis of the integrand 
+while the former is for the use over finite intervals and the latter for 
+infinite intervals. However, there are routines specialized in integrals of functions 
+which have singularities or are strongly oscillating. Using such a 
+specialized function will be less expensive in most cases since fewer 
+conditions need to be checked.
+
+Although the GSL does not natively include methods for multidimensional integration, 
+there exists an extension for that purpose. NAGlib provides routines for 
+multidimensional integration over hyper rectangles and simplexes, n-cubes and 
+n-spheres innately. Moreover, a routine which uses a Monte-Carlo method is 
+included as well. With the returned absolute or relative error assumptions of 
+the accuracy can be made.
+
+
+
+

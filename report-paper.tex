@@ -1,0 +1,76 @@
+\documentclass{article}
+
+\usepackage[backend=bibtex, bibencoding=ascii]{biblatex}
+\bibliography{wikipedia, mendeley}
+
+\usepackage{amsmath}
+% \usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsxtra}
+\usepackage{listings}
+\usepackage{graphics}
+\usepackage{url}
+\usepackage{svg}
+\usepackage{enumitem}
+
+\usepackage{todonotes}
+
+% \usepackage{marginnote}
+% \reversemarginpar
+
+\newcommand{\refchapter}[1]{Chapter~\ref{#1}}
+\newcommand{\refsec}[1]{Section~\ref{#1}}
+\newcommand{\refeqn}[1]{Equation~(\ref{#1})}
+\newcommand{\reffig}[1]{Figure~\ref{#1}}
+
+\setlength{\parskip}{1em}
+
+\newcommand{\bluetext}[1]{%
+  \marginnote{\color{gray}#1}} % \small\itshape
+	
+\newcommand{\annotation}[1]{%
+%\uppercase{\bluetext{#1}}}
+	\bluetext{#1}}
+
+\title{
+{\bf \scriptsize RHEINISCH-WESTFÄLISCHE TECHNISCHE HOCHSCHULE AACHEN} \vspace{2cm} \\
+{\large Seminar on Numerical Libraries} \vspace{1em}\\
+QUADRATURE \vspace{1em}\\
+ }
+\author{
+Tobias Schürg
+}
+
+%\date{\includegraphics[height=2cm]{figures/logo_stce}}
+
+\begin{document}
+
+\lstloadlanguages{[ISO]C++}
+\lstset{basicstyle=\small, numbers=left, numberstyle=\footnotesize,
+  stepnumber=1, numbersep=5pt, breaklines=true, escapeinside={/*@}{@*/}}
+
+
+\pagestyle{headings}
+
+\maketitle
+
+\input{content/abstract}
+
+\newpage
+
+\tableofcontents 
+
+\include{content/chapter1_intro}
+\include{content/chapter2_background}
+\include{content/chapter3_methods}
+\include{content/chapter4_conclusion}
+
+\include{content/chapterx_appendix}
+
+% \bibliographystyle{chicago}
+
+\printbibliography
+
+\end{document}
+
